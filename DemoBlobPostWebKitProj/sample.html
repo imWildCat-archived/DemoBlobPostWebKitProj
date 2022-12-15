@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+</head>
+
+<body>
+
+
+
+  <button id="sample-btn">Upload Photo to <code>SampleSchemeHandler</code></button>
+
+
+  <script>
+    function uploadPhoto() {
+      console.log('[trace] button clicked');
+
+      const sampleImageURL = `https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/%22Volumenes_entre_verde%22.jpg/2880px-%22Volumenes_entre_verde%22.jpg`;
+
+      fetch(sampleImageURL)
+        .then(response => response.blob())
+        .then(blob => blob.arrayBuffer())
+        .then(arrayBuffer => {
+          // post blob as raw data to 'sample://upload' use XMLHttpRequest
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', 'sample://upload', true);
+          xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+          xhr.send(arrayBuffer);
+
+          console.log('[trace] start to posting arrayBuffer', arrayBuffer);
+          // allow CORS for 'sample-scheme://upload'
+
+          // fetch('sample://upload', {
+          //   method: 'POST',
+          //   body: arrayBuffer
+          // })
+          //   .then(response => console.log('[trace] response', response))
+          //   // .then(json => console.log('[trace] json', json))
+          //   .catch(error => console.error('[error] error', error));
+        });
+    }
+
+    document.getElementById('sample-btn').addEventListener('click', uploadPhoto);
+    document.getElementById('sample-btn').addEventListener('touchstart', uploadPhoto);
+
+  </script>
+</body>
+
+</html>
